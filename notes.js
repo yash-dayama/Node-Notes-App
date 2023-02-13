@@ -2,18 +2,21 @@ const fs = require('fs')
 const chalk = require('chalk')
 
 
-const getNotes= function(){
+const getNotes= () => {
     // console.log("This are your notes");
     return "Your notes..."
 }
 
 // adding notes
-const addNote= function(title, body){
+const addNote= (title, body) =>{
     const notes = loadNotes()
-    const duplicateNotes = notes.filter(function(note){
-        return note.title === title
-    })
-    if(duplicateNotes.length === 0){
+    // const duplicateNotes = notes.filter((note) => note.title === title)
+    const duplicateNote = notes.find((note) => note.title === title8888888)
+    // const duplicateNotes = notes.filter(function(note){
+    //     return note.title === title
+    // })
+    debugger
+    if(!duplicateNote){
         notes.push({
             title: title,
             body: body
@@ -26,12 +29,14 @@ const addNote= function(title, body){
 // loaded in array
   
 }
+    
 
-const removeNote = function(title){
+const removeNote = (title) => {
     const notes = loadNotes()
-    const notesToKeep = notes.filter(function(note){
-        return note.title !== title
-    })
+    const notesToKeep = notes.filter((note) => note.title !== title)
+    // const notesToKeep = notes.filter(function(note){
+    //     return note.title !== title
+    // })
     if (notes.length > notesToKeep.length){
         console.log(chalk.green.inverse('Note removed!!!'))
         saveNotes(notesToKeep)
@@ -40,14 +45,24 @@ const removeNote = function(title){
     }
 }
 
+const listNotes = (
+        
+) =>{
+    const notes = loadNotes()
 
-const saveNotes = function(notes){
+    console.log(chalk.inverse('Your Notes'))
+    notes.forEach((note) =>{
+        console.log(note.title)
+    })
+}
+
+const saveNotes = (notes) => {
     const dataJSON = JSON.stringify(notes)
     fs.writeFileSync('notes.json', dataJSON)
 }
 
 // loading the notes 
-const loadNotes= function(){
+const loadNotes= () => {
     try{
     // where the notes will be NOTES.JSON
     const dataBuffer = fs.readFileSync('notes.json')
@@ -60,8 +75,22 @@ const loadNotes= function(){
 
 
 }
+
+const readNote = (title) =>{
+    const notes = loadNotes()
+    const note = notes.find((note) => note.title === title)
+
+    if(note){
+        console.log(chalk.inverse(note.title))
+        console.log(note.body)
+    }else{
+        console.log(chalk.inverse.red('Note does not exist'));
+    }
+}
 module.exports = {
       getNotes: getNotes,
       addNote: addNote,
-      removeNote: removeNote
+      removeNote: removeNote,
+      listNotes: listNotes,
+      readNote: readNote
 }
